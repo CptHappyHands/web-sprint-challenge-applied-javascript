@@ -1,3 +1,5 @@
+import axios from "axios"
+
 const Card = (article) => {
   // TASK 5
   // ---------------------
@@ -20,7 +22,8 @@ const Card = (article) => {
   const card = document.createElement('div')
   const articleHeadline = document.createElement('div')
   const articleAuthor = document.createElement('div')
-  const img = document.createElement('div')
+  const imgHolder = document.createElement('div')
+  const img = document.createElement('img')
   const authorName = document.createElement('span')
   
   articleHeadline.textContent = `${article.headline}`
@@ -28,13 +31,15 @@ const Card = (article) => {
   authorName.textContent = `${article.authorName}`
 
   card.classList.add('card')
+  imgHolder.classList.add('img-container')
   articleHeadline.classList.add('headline')
   articleAuthor.classList.add('author')
 
   card.appendChild(articleHeadline)
   card.appendChild(articleAuthor)
-  articleAuthor.appendChild(img)
+  articleAuthor.appendChild(imgHolder)
   articleAuthor.appendChild(authorName)
+  imgHolder.appendChild(img)
 
   card.addEventListener('click', (event) => {
     console.log(articleHeadline)
@@ -52,6 +57,94 @@ const cardAppender = (selector) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
+  const cardTarget = document.querySelector(`${selector}`)
+  // let topics
+  // axios.get(`http://localhost:5000/api/topics`)
+  // .then( response => {
+  //  let topics = response.data.topics
+  // //  return topics
+   
+  // })
+  // console.log(topics)
+  axios.get(`http://localhost:5000/api/articles`)
+  // .then( response => {
+  //   response.data.articles.javascript.forEach( x => {
+  //     let cardTitle = x;
+  //     cardTarget.appendChild(cardTitle);
+  //   })
+  //   .then( x => {
+  //     x.forEach( item => {
+  //       let card = Card(item)
+  //       cardTarget.appendChild(card)
+  //     })
+  //   })
+  //   })
+  .then( response => {
+    response.forEach( item => {
+      let tabTitle = item
+      cardTarget.appendChild(tabTitle)
+    })
+    .then(tabTitle => {
+      tabTitle.forEach( thing => {
+        let card = Card(thing)
+        cardTarget.appendChild(card)
+      })
+    })
+  })
+    //sort of works
+  //   .then( response => {
+  //   response.data.articles.javascript.forEach( item => {
+  //     let card = Card(item)
+  //     cardTarget.appendChild(card)
+  //   })
+  // })
+  //end of sort of works
+
+  // .then( response => {
+  //   response.data.articles.bootstrap.forEach( item => {
+  //     let card = Card(item)
+  //     cardTarget.appendChild(card)
+  //   })
+  // })
+
+  // .then( response => {
+  //   response.data.articles.technology.forEach( item => {
+  //     let card = Card(item)
+  //     cardTarget.appendChild(card)
+  //   })
+  // })
+
+  // .then( response => {
+  //   response.data.articles.jquery.forEach( item => {
+  //     let card = Card(item)
+  //     cardTarget.appendChild(card)
+  //   })
+  // })
+
+  // .then( response => {
+  //   response.data.articles.node.forEach( item => {
+  //     let card = Card(item)
+  //     cardTarget.appendChild(card)
+  //   })
+  // })
+ 
+  .catch(err => console.log(err.message))
+  .finally(() => console.log('done'))
 }
+
+//   axios.get(`http://localhost:5000/api/articles`)
+//   .then(response => {
+//   response.data.forEach(title => {
+
+//     const card = Card(response.data)
+//   })
+//     return card
+//   })
+//   .then(card => {
+//     cardTarget.appendChild(card)
+//   })
+//   .catch(err => console.log(err.message))
+//   .finally(() => console.group('done2'))
+// }
 
 export { Card, cardAppender }
