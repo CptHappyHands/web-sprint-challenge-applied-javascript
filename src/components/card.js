@@ -1,4 +1,5 @@
 import axios from "axios"
+import { response } from "msw"
 
 const Card = (article) => {
   // TASK 5
@@ -67,6 +68,7 @@ const cardAppender = (selector) => {
   // })
   // console.log(topics)
   axios.get(`http://localhost:5000/api/articles`)
+  
   // .then( response => {
   //   response.data.articles.javascript.forEach( x => {
   //     let cardTitle = x;
@@ -79,27 +81,42 @@ const cardAppender = (selector) => {
   //     })
   //   })
   //   })
-  .then( response => {
-    response.forEach( item => {
-      let tabTitle = item
-      cardTarget.appendChild(tabTitle)
-    })
-    .then(tabTitle => {
-      tabTitle.forEach( thing => {
-        let card = Card(thing)
-        cardTarget.appendChild(card)
-      })
-    })
-  })
-    //sort of works
+  // .then( response => {
+  //   response.forEach( item => {
+  //     let tabTitle = item
+  //     cardTarget.appendChild(tabTitle)
+  //   })
+  //   .then(tabTitle => {
+  //     tabTitle.forEach( thing => {
+  //       let card = Card(thing)
+  //       cardTarget.appendChild(card)
+  //     })
+  //   })
+  // })
+  // .then(response => {
+  //   console.log("here is the res", response)
+  // })
+
+  //sort of works
   //   .then( response => {
-  //   response.data.articles.javascript.forEach( item => {
+  //     const article = response.data.articles.javascript
+  //     article.forEach( item => {
   //     let card = Card(item)
   //     cardTarget.appendChild(card)
   //   })
   // })
   //end of sort of works
+//more close to working
+.then( response => {
+  Object.values(response.data.articles).forEach((key) => {
+    key.forEach(item => {
+      let card = Card(item)
+      cardTarget.appendChild(card)
+    })
+  })
+})
 
+//end of close to working
   // .then( response => {
   //   response.data.articles.bootstrap.forEach( item => {
   //     let card = Card(item)
